@@ -1,0 +1,18 @@
+.idea
+.vscode
+.DS_Store
+/**/node_modules
+/**/*.log
+/**/.env
+
+# Server parts
+/server/dist
+
+
+# UI parts
+/ui/build
+ui/.next/
+ui/next-env.d.ts
+
+
+
