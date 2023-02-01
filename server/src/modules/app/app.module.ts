@@ -10,10 +10,7 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validationSchema }),
-    MongooseModule.forRoot(
-      process.env.DB_CONNECT_MONGOOSE ||
-        'mongodb://root:example@localhost:27017/bloggers_posts?authSource=admin',
-    ),
+    MongooseModule.forRoot(process.env.DB_CONNECT_MONGOOSE),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Deal.name, schema: DealSchema },
