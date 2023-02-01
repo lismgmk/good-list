@@ -1,11 +1,11 @@
-version: "3.9"
+version: '3.9'
 services:
   ui:
     build: ./ui
     restart: always
     ports:
-      - "3000:3000"
-      - "9230:9230"
+      - '3000:3000'
+      - '9230:9230'
     volumes:
       - /app/node_modules
       - ./ui:/app
@@ -14,16 +14,16 @@ services:
     build: ./server
     restart: always
     ports:
-      - "5000:5000"
-      - "9229:9229"
+      - '5000:5000'
+      - '9229:9229'
     depends_on:
       - mongo
     volumes:
       - /app/node_modules
       - ./server:/app
     environment:
-      NODE_ENV: "dev"
-      DB_CONNECT_MONGOOSE: "mongodb://root:example@mongo:27017/good_deals?authSource=admin"
+      NODE_ENV: 'dev'
+      DB_CONNECT_MONGOOSE: 'mongodb://root:example@mongo:27017/good_deals?authSource=admin'
     command: npm run start
   mongo:
     image: mongo
