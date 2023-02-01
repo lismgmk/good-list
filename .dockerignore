@@ -1,7 +1,8 @@
 node_modules
 
 # docker
-Dockerfile
+/ui/Dockerfile
+/server/Dockerfile
 
 # misc
 .git

@@ -1,8 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { useContainer } from 'class-validator';
+import cookieParser from 'cookie-parser';
+import { AppModule } from './modules/app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(5000);
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.enableCors();
+  app.use(cookieParser());
+  await app.listen(process.env.PORT || 5000);
 }
+
 bootstrap();
