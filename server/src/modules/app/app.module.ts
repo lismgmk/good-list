@@ -6,7 +6,7 @@ import { BlackList, BlackListSchema } from '../../schemas/black-list.schema';
 import { Deal, DealSchema } from '../../schemas/deal.schema';
 import { User, UserSchema } from '../../schemas/user.schema';
 import { BlackListModule } from '../black-list/black-list.module';
-import { DealsModule } from '../deals/deals.module';
+import { DealModule } from '../deals/deal.module';
 import { JwtPassModule } from '../jwt-pass/jwt-pass.module';
 import { UserModule } from '../user/user.module';
 import { AppController } from './app.controller';
@@ -25,7 +25,7 @@ import { AdminModule } from '../admin/admin.module';
     ]),
     UserModule,
     BlackListModule,
-    DealsModule,
+    DealModule,
     JwtPassModule,
     AuthModule,
     AdminModule,
