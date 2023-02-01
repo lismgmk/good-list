@@ -60,4 +60,19 @@ export class UserService {
       });
     }
   }
+
+  async deleteUserById(id: string) {
+    return this.userModel.findByIdAndDelete(id);
+  }
+
+  async getAllUsers() {
+    const pipline = {
+      _id: 0,
+      id: '$_id',
+      login: 1,
+      email: 1,
+      createdAt: 1,
+    };
+    return this.userModel.aggregate([{ $project: pipline }]).exec();
+  }
 }
