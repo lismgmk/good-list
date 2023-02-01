@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, SchemaTypes, Types } from 'mongoose';
 import {
-  FIELD_EMAIL_VALIDATION_ERROR,
   FIELD_LENGTH_VALIDATION_ERROR_LONG,
   FIELD_LENGTH_VALIDATION_ERROR_SHORT,
   FIELD_REQUIRED_VALIDATION_ERROR,

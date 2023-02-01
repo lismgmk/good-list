@@ -66,13 +66,17 @@ export class UserService {
   }
 
   async getAllUsers() {
-    const pipline = {
-      _id: 0,
-      id: '$_id',
-      login: 1,
-      email: 1,
-      createdAt: 1,
-    };
-    return this.userModel.aggregate([{ $project: pipline }]).exec();
+    const pipeline = [
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          login: 1,
+          email: 1,
+          createdAt: 1,
+        },
+      },
+    ];
+    return this.userModel.aggregate(pipeline).exec();
   }
 }

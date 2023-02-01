@@ -13,7 +13,6 @@ import { GetUserId } from '../../decorators/get-user-id.decorator';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { ParamIdValidationPipe } from '../../pipes/param-id-validation.pipe';
 import { CustomValidationPipe } from '../../pipes/validation.pipe';
-import { User } from '../../schemas/user.schema';
 import { DealService } from './deal.service';
 import { DealContentDto } from './dto/content.dto';
 
@@ -28,7 +27,7 @@ export class DealController {
     @GetUserId()
     userId: string,
   ) {
-    return await this.dealService.getAllDeals(userId);
+    return await this.dealService.getAllDeals({ userId });
   }
 
   @Get(':id')
@@ -52,10 +51,10 @@ export class DealController {
     @Body(new CustomValidationPipe())
     content: DealContentDto,
     @GetUserId()
-    userId: User,
+    userId: string,
   ) {
     return await this.dealService.createDeal({
-      content,
+      ...content,
       userId,
     });
   }
@@ -73,7 +72,7 @@ export class DealController {
   ) {
     return await this.dealService.changeDeal({
       dealId,
-      content,
+      ...content,
       userId,
     });
   }

@@ -13,10 +13,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from '../auth/auth.module';
 import { AdminModule } from '../admin/admin.module';
+import { configRoot } from '../../config/configuration';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, validationSchema }),
+    ConfigModule.forRoot(configRoot),
     MongooseModule.forRoot(process.env.DB_CONNECT_MONGOOSE),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
