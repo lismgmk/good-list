@@ -6,10 +6,18 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { GetUserId } from '../../decorators/get-user-id.decorator';
+import { GetUser } from '../../decorators/get-user.decorator';
+import { PureRefreshToken } from '../../decorators/pure-refresh-token.decorator';
+import { CookieGuard } from '../../guards/cookie.guard';
+import { LocalStrategyGuard } from '../../guards/local-strategy.guard';
 import { CustomValidationPipe } from '../../pipes/validation.pipe';
 import { User } from '../../schemas/user.schema';
 import { BlackListService } from '../black-list/black-list.service';
 import { AuthService } from './auth.service';
+import { Response } from 'express';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { LoginAuthDto } from './dto/login-auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -34,7 +42,7 @@ export class AuthController {
     @GetUser() user: User,
     @PureRefreshToken()
     refreshToken: string,
-  ): Promise<ITokenResponse> {
+  ): Promise<{ accessToken: string }> {
     await this.blackListService.addToken(refreshToken);
     const tokens = await this.authService.getRefreshAccessToken(user.id);
 
@@ -52,7 +60,7 @@ export class AuthController {
     @GetUserId() userId: string,
     @Res({ passthrough: true }) res: Response,
     @Body(new CustomValidationPipe()) loginAuthDto: LoginAuthDto,
-  ): Promise<ITokenResponse> {
+  ): Promise<{ accessToken: string }> {
     const tokens = await this.authService.getRefreshAccessToken(userId);
     res.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,

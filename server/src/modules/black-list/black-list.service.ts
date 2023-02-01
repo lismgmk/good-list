@@ -9,7 +9,7 @@ export class BlackListService {
     @InjectModel(BlackList.name) private blackListModel: Model<BlackList>,
   ) {}
   async addToken(token: string) {
-    return this.blackListModel.create({ tokenValue: token }).exec();
+    return this.blackListModel.create({ tokenValue: token });
   }
 
   async getToken(token: string) {
