@@ -27,3 +27,4 @@ db.createUser({
 // user created
 db.createCollection('deals');
 db.createCollection('users');
+db.createCollection('blackList');

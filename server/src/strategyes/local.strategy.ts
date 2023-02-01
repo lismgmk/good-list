@@ -2,9 +2,9 @@ import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtPassService } from '../src/modules/jwt-pass/jwt-pass.service';
-import { IUser } from '../src/schemas/user.schema';
-import { UserService } from '../src/modules/user/user.service';
+import { JwtPassService } from '../modules/jwt-pass/jwt-pass.service';
+import { IUser } from '../schemas/user.schema';
+import { UserService } from '../modules/user/user.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
