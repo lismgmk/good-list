@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { FIELD_EXIST_VALIDATION_ERROR } from '../../consts/ad-validation-const';
@@ -82,8 +86,15 @@ export class UserService {
   }
 
   async addFriend(dto: IAddFriend) {
+    const friend = await this.userModel.findOne({ login: dto.friendLogin });
+    const isExist = await this.userModel.findOne({
+      friends: { $in: [friend._id] },
+    });
+    if (isExist) {
+      throw new ForbiddenException();
+    }
     const param = {
-      $push: { friends: dto.friendId },
+      $push: { friends: friend._id },
     };
     const user = await this.userModel.findByIdAndUpdate(dto.userId, param, {
       new: true,
