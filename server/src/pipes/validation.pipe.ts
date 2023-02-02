@@ -20,6 +20,7 @@ export class CustomValidationPipe implements PipeTransform<any> {
         const object = plainToInstance(argumentMetadata.metatype, value);
 
         const errors = await validate(object);
+        console.log(errors);
 
         const errorsArr = errors.map((el) => {
           return {

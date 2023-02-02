@@ -5,10 +5,14 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { FIELD_EXIST_VALIDATION_ERROR } from '../../consts/ad-validation-const';
+import {
+  EXIST_FRIEND,
+  FIELD_EXIST_VALIDATION_ERROR,
+} from '../../consts/ad-validation-const';
+import { toObjectId } from '../../helper/to-objectid';
 import { User } from '../../schemas/user.schema';
 import { JwtPassService } from '../jwt-pass/jwt-pass.service';
-import { IAddFriend } from './dto/add-friend.interface';
+import { IAddFriend, ICondition } from './dto/add-friend.interface';
 import { ICreateUser } from './dto/create-user.dto';
 
 @Injectable()
@@ -87,18 +91,74 @@ export class UserService {
 
   async addFriend(dto: IAddFriend) {
     const friend = await this.userModel.findOne({ login: dto.friendLogin });
+
     const isExist = await this.userModel.findOne({
       friends: { $in: [friend._id] },
     });
     if (isExist) {
-      throw new ForbiddenException();
+      throw new ForbiddenException(EXIST_FRIEND);
     }
     const param = {
       $push: { friends: friend._id },
     };
-    const user = await this.userModel.findByIdAndUpdate(dto.userId, param, {
+    await this.userModel.findByIdAndUpdate(dto.userId, param, {
       new: true,
     });
-    return user;
+
+    return;
+  }
+
+  async getFriendList(dto: IAddFriend) {
+    const condition = {
+      $and: [
+        { _id: { $eq: toObjectId(dto.friendId) } },
+        { friends: { $in: [toObjectId(dto.userId)] } },
+      ],
+    };
+    return this.userModel.aggregate(this.piplineAgregate(condition)).exec();
+  }
+
+  async getAllFriendsList(userId: string) {
+    const condition = {
+      friends: { $in: [toObjectId(userId)] },
+    };
+    return this.userModel.aggregate(this.piplineAgregate(condition)).exec();
+  }
+
+  private piplineAgregate(condition: ICondition) {
+    return [
+      {
+        $match: condition,
+      },
+      {
+        $lookup: {
+          from: 'deals',
+          localField: 'userId',
+          foreignField: 'id',
+          as: 'goodDeals',
+          pipeline: [
+            {
+              $project: {
+                _id: 0,
+                id: '$_id',
+                userId: 1,
+                content: 1,
+                createdAt: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: '$_id',
+          login: 1,
+          email: 1,
+          createdAt: 1,
+          goodDeals: 1,
+        },
+      },
+    ];
   }
 }
