@@ -4,6 +4,7 @@ import { Model, ObjectId } from 'mongoose';
 import { FIELD_EXIST_VALIDATION_ERROR } from '../../consts/ad-validation-const';
 import { User } from '../../schemas/user.schema';
 import { JwtPassService } from '../jwt-pass/jwt-pass.service';
+import { IAddFriend } from './dto/add-friend.interface';
 import { ICreateUser } from './dto/create-user.dto';
 
 @Injectable()
@@ -78,5 +79,15 @@ export class UserService {
       },
     ];
     return this.userModel.aggregate(pipeline).exec();
+  }
+
+  async addFriend(dto: IAddFriend) {
+    const param = {
+      $push: { friends: dto.friendId },
+    };
+    const user = await this.userModel.findByIdAndUpdate(dto.userId, param, {
+      new: true,
+    });
+    return user;
   }
 }

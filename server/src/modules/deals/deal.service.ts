@@ -6,6 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { NOT_OWNER } from '../../consts/ad-validation-const';
+import { toObjectId } from '../../helper/to-objectid';
 import { Deal, IDeal } from '../../schemas/deal.schema';
 import { IDealDto } from './dto/deal.interfaces';
 
@@ -14,9 +15,10 @@ export class DealService {
   constructor(@InjectModel(Deal.name) private dealModel: Model<Deal>) {}
 
   async getAllDeals(dto: IDealDto) {
-    await this.checkDealOwner({ userId: dto.userId, dealId: dto.dealId });
+    console.log(dto);
+
     const pipeline = [
-      { $match: { userId: dto.userId } },
+      { $match: { userId: toObjectId(dto.userId) } },
       {
         $project: {
           _id: 0,
@@ -32,7 +34,7 @@ export class DealService {
   async getDealById(dto: IDealDto) {
     await this.checkDealOwner({ userId: dto.userId, dealId: dto.dealId });
     const pipeline = [
-      { $match: { _id: dto.dealId } },
+      { $match: { _id: toObjectId(dto.dealId) } },
       {
         $project: {
           _id: 0,
@@ -46,8 +48,6 @@ export class DealService {
   }
 
   async createDeal(dto: IDealDto) {
-    await this.checkDealOwner({ userId: dto.userId, dealId: dto.dealId });
-
     const newDeal = new this.dealModel({
       content: dto.content,
       userId: dto.userId,

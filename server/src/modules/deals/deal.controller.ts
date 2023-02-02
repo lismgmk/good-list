@@ -27,7 +27,7 @@ export class DealController {
     @GetUserId()
     userId: string,
   ) {
-    return await this.dealService.getAllDeals({ userId });
+    return this.dealService.getAllDeals({ userId });
   }
 
   @Get(':id')
@@ -70,7 +70,7 @@ export class DealController {
     @GetUserId()
     userId: string,
   ) {
-    return await this.dealService.changeDeal({
+    return this.dealService.changeDeal({
       dealId,
       ...content,
       userId,

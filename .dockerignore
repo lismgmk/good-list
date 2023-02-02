@@ -1,5 +1,5 @@
 node_modules
-
+.vscode
 # docker
 /ui/Dockerfile
 /server/Dockerfile
@@ -12,6 +12,9 @@ docker-compose.yml
 README.md
 
 # Node Files #
-node_modules
-npm-debug.log
-npm-debug.log.*
+/ui/node_modules
+/ui/npm-debug.log
+/ui/npm-debug.log.*
+/server/node_modules
+/server/npm-debug.log
+/server/npm-debug.log.*
