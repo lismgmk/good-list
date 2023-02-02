@@ -24,7 +24,6 @@ services:
       - /app/node_modules
       - ./server:/app
     environment:
-      NODE_ENV: "dev"
       DB_CONNECT_MONGOOSE: "mongodb://root:example@mongo:27017/good_deals?authSource=admin"
     command: npm run start
   mongo:
