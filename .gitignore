@@ -1,5 +1,4 @@
 .idea
-.vscode
 .DS_Store
 /**/node_modules
 /**/*.log
@@ -13,6 +12,5 @@
 /ui/build
 ui/.next/
 ui/next-env.d.ts
-
 
 
