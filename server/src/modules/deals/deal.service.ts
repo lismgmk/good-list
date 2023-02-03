@@ -15,8 +15,6 @@ export class DealService {
   constructor(@InjectModel(Deal.name) private dealModel: Model<Deal>) {}
 
   async getAllDeals(dto: IDealDto) {
-    console.log(dto);
-
     const pipeline = [
       { $match: { userId: toObjectId(dto.userId) } },
       {
