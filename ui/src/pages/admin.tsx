@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import {
-  Button,
-  TextField,
-  Table,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@material-ui/core";
+import { Button, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 
 const useStyles = makeStyles({
   root: {

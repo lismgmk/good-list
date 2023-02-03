@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/styles";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 import { GetStaticProps } from "next";
+import { Button, TextField } from '@mui/material';
 
 interface ITodo {
   id: string;
@@ -108,4 +107,4 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export default Todo;
+export default TodoListItem;
