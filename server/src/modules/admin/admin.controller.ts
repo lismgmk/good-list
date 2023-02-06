@@ -21,7 +21,7 @@ export class AdminController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/users')
-  @UseGuards(AuthGuard('basic'))
+  // @UseGuards(AuthGuard('basic'))
   async createUser(
     @Body(new CustomValidationPipe()) createUserDto: CreateUserDto,
   ) {

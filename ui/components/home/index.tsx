@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { Box, Button, TextField } from "@mui/material";
 import axios from "axios";
-import { makeStyles } from "@material-ui/styles";
 import { GetStaticProps } from "next";
-import { Button, TextField } from '@mui/material';
+import React, { useEffect, useState } from "react";
 
 interface ITodo {
   id: string;
@@ -14,25 +13,20 @@ interface ITodoListItemProps {
   onUpdate: (todo: ITodo) => void;
   onDelete: (id: string) => void;
 }
-
-const useStyles = makeStyles((theme: any) => ({
-  root: {
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-      width: "25ch",
-    },
+const sxRoot = {
+  "& .MuiTextField-root": {
+    margin: "10px",
+    width: "25ch",
   },
-  button: {
-    margin: theme.spacing(1),
-  },
-}));
+};
+const sxButton = { margin: "10px" };
 
-const TodoListItem: React.FC<ITodoListItemProps> = ({
+// const MainHome = () => {
+const MainHome: React.FC<ITodoListItemProps> = ({
   todo,
   onUpdate,
   onDelete,
 }) => {
-  const classes = useStyles();
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(todo.text);
 
@@ -51,7 +45,7 @@ const TodoListItem: React.FC<ITodoListItemProps> = ({
   };
 
   return editing ? (
-    <div className={classes.root}>
+    <Box sx={sxRoot}>
       <TextField
         label="Todo"
         value={text}
@@ -63,26 +57,22 @@ const TodoListItem: React.FC<ITodoListItemProps> = ({
         variant="contained"
         color="primary"
         onClick={handleSave}
-        className={classes.button}
+        sx={sxButton}
       >
         Save
       </Button>
-      <Button
-        variant="contained"
-        onClick={handleCancel}
-        className={classes.button}
-      >
+      <Button variant="contained" onClick={handleCancel} sx={sxButton}>
         Cancel
       </Button>
-    </div>
+    </Box>
   ) : (
-    <div className={classes.root}>
+    <Box sx={sxRoot}>
       <div>{todo.text}</div>
       <Button
         variant="contained"
         color="primary"
         onClick={handleEdit}
-        className={classes.button}
+        sx={sxButton}
       >
         Edit
       </Button>
@@ -90,16 +80,16 @@ const TodoListItem: React.FC<ITodoListItemProps> = ({
         variant="contained"
         color="secondary"
         onClick={() => onDelete(todo.id)}
-        className={classes.button}
+        sx={sxButton}
       >
         Delete
       </Button>
-    </div>
+    </Box>
   );
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { data } = await axios.get("http://localhost:5000/deals");
+  const { data } = await axios.get("http://localhost:5000/admin/users");
   return {
     props: {
       todos: data,
@@ -107,4 +97,4 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export default TodoListItem;
+export default MainHome;

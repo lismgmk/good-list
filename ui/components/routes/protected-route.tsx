@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from "react";
 import Router from "next/router";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { NextPageContext } from "next";
 
 interface IProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children }) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const accessToken = getCookie("accessToken");
+    const accessToken = getCookie(
+      router.query as unknown as NextPageContext,
+      "accessToken"
+    );
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (!accessToken || !refreshToken) {
-      Router.push("/login");
+      Router.push("/user/login");
       return;
     }
 
@@ -23,7 +29,7 @@ const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children }) => {
         refreshToken,
       })
       .then((res) => {
-        setCookie("accessToken", res.data.accessToken, 7);
+        // setCookie("accessToken", res.data.accessToken, 7);
         setLoading(false);
       })
       .catch((err) => {
@@ -39,16 +45,14 @@ const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children }) => {
   return <>{children}</>;
 };
 
-function getCookie(name: string): string | null {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-
-  if (parts.length === 2) {
-    return parts.pop()!.split(";").shift();
-  }
-
-  return null;
-}
+const getCookie = (ctx: NextPageContext | undefined, name: string) => {
+  if (!ctx || !ctx.req) return undefined;
+  const value = ctx.req.headers.cookie
+    ?.split(";")
+    .find((c) => c.trim().startsWith(`${name}=`));
+  if (!value) return undefined;
+  return value.split("=")[1];
+};
 
 function setCookie(name: string, value: string, days: number): void {
   const date = new Date();

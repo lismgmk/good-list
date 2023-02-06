@@ -1,35 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import { Button, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TextField,
+  Box,
+  FormControl,
+} from "@mui/material";
 
-const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    margin: "50px",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  input: {
-    margin: "10px",
-  },
-  button: {
-    margin: "10px",
-  },
-});
+const sxRoot = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  margin: "50px",
+};
+const sxForm = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+};
+const sxInput = { margin: "10px" };
+const sxButton = { margin: "10px" };
 
 interface IUser {
   id: number;
   name: string;
 }
 
-const UserPage: React.FC = () => {
-  const classes = useStyles();
+const AdminPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [users, setUsers] = useState<IUser[]>([]);
 
@@ -56,18 +57,18 @@ const UserPage: React.FC = () => {
   };
 
   return (
-    <div className={classes.root}>
-      <form onSubmit={handleSubmit} className={classes.form}>
+    <Box sx={sxRoot}>
+      <FormControl onSubmit={handleSubmit} sx={sxForm}>
         <TextField
-          className={classes.input}
+          sx={sxInput}
           label="User name"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <Button className={classes.button} type="submit" variant="contained">
+        <Button sx={sxButton} type="submit" variant="contained">
           Submit
         </Button>
-      </form>
+      </FormControl>
       <Table>
         <TableBody>
           {users.map((user) => (
@@ -80,8 +81,8 @@ const UserPage: React.FC = () => {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </Box>
   );
 };
 
-export default UserPage;
+export default AdminPage;

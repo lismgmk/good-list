@@ -1,7 +1,7 @@
 import React from "react";
 import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 interface ILoginResponse {
   accessToken: string;
@@ -15,7 +15,12 @@ interface ILoginFormData {
 
 const Login: React.FC = () => {
   const router = useRouter();
-  const { register, handleSubmit, errors } = useForm<ILoginFormData>();
+  // const { register, handleSubmit, errors } = useForm<ILoginFormData>();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ILoginFormData>();
 
   const onSubmit = async (data: ILoginFormData) => {
     try {
@@ -31,28 +36,46 @@ const Login: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input
+      <Controller
+        render={(props) => (
+          <input
+            name="login"
+            placeholder="Login"
+            // onChange={props.onChange}
+            // value={props.value}
+          />
+        )}
         name="login"
-        ref={register({
+        control={control}
+        defaultValue=""
+        rules={{
           required: true,
           minLength: 5,
           maxLength: 7,
-        })}
-        placeholder="Login"
+        }}
       />
       {errors.login && (
         <p>Login is required and must be between 5 and 7 characters long.</p>
       )}
 
-      <input
-        type="password"
+      <Controller
+        render={(props) => (
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            // onChange={props.onChange}
+            // value={props.value}
+          />
+        )}
         name="password"
-        ref={register({
+        control={control}
+        defaultValue=""
+        rules={{
           required: true,
           minLength: 5,
           maxLength: 7,
-        })}
-        placeholder="Password"
+        }}
       />
       {errors.password && (
         <p>Password is required and must be between 5 and 7 characters long.</p>
