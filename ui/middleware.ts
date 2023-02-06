@@ -15,6 +15,7 @@ export function middleware(req: NextRequest, ev: NextFetchEvent) {
 
   // return NextResponse.redirect(`${process.env.CLIENT_LOCAL_URL}/user/login`);
   // return NextResponse.redirect(url, 302);
+  
   const url = req.nextUrl.clone();
   url.pathname = "/user/login";
   return NextResponse.redirect(url, 302);

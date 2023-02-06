@@ -8,44 +8,80 @@ interface IProtectedRouteProps {
   children: React.ReactNode;
 }
 
-const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children }) => {
+const HendlerIntercepter = async () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const accessToken = getCookie(
-      router.query as unknown as NextPageContext,
-      "accessToken"
-    );
-    const refreshToken = localStorage.getItem("refreshToken");
+  const accessToken = getCookie(
+    router.query as unknown as NextPageContext,
+    "accessToken"
+  );
+  const refreshToken = localStorage.getItem("refreshToken");
 
-    if (!accessToken || !refreshToken) {
-      Router.push("/user/login");
-      return;
-    }
+  if (!accessToken || !refreshToken) {
+    Router.push("/user/login");
+    return;
+  }
 
-    axios
-      .post("http://localhost:5000/refresh-token", {
-        refreshToken,
-      })
-      .then((res) => {
-        // setCookie("accessToken", res.data.accessToken, 7);
-        setLoading(false);
-      })
-      .catch((err) => {
-        localStorage.removeItem("refreshToken");
-        Router.push("/login");
-      });
-  }, []);
+  const newTokens = await axios
+    .post("http://localhost:5000/refresh-token", {
+      refreshToken,
+    })
+    .then((res) => {
+      // setCookie("accessToken", res.data.accessToken, 7);
+      setLoading(false);
+    })
+    .catch((err) => {
+      localStorage.removeItem("refreshToken");
+      Router.push("/login");
+    });
 
   if (loading) {
     return <p>Loading...</p>;
   }
-
-  return <>{children}</>;
 };
+// interface IProtectedRouteProps {
+//   children: React.ReactNode;
+// }
 
-const getCookie = (ctx: NextPageContext | undefined, name: string) => {
+// const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children }) => {
+//   const router = useRouter();
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const accessToken = getCookie(
+//       router.query as unknown as NextPageContext,
+//       "accessToken"
+//     );
+//     const refreshToken = localStorage.getItem("refreshToken");
+
+//     if (!accessToken || !refreshToken) {
+//       Router.push("/user/login");
+//       return;
+//     }
+
+//     axios
+//       .post("http://localhost:5000/refresh-token", {
+//         refreshToken,
+//       })
+//       .then((res) => {
+//         // setCookie("accessToken", res.data.accessToken, 7);
+//         setLoading(false);
+//       })
+//       .catch((err) => {
+//         localStorage.removeItem("refreshToken");
+//         Router.push("/login");
+//       });
+//   }, []);
+
+//   if (loading) {
+//     return <p>Loading...</p>;
+//   }
+
+//   return <>{children}</>;
+// };
+
+export const getCookie = (ctx: NextPageContext | undefined, name: string) => {
   if (!ctx || !ctx.req) return undefined;
   const value = ctx.req.headers.cookie
     ?.split(";")

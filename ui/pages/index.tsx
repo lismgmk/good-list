@@ -28,8 +28,8 @@ interface ITodo {
 }
 
 interface ITodoListItemProps {
-  // todo: ITodo;
-  todo: string;
+  todo: ITodo;
+  // todo: string;
   // onUpdate: (todo: ITodo) => void;
   // onDelete: (id: string) => void;
 }
@@ -49,6 +49,20 @@ const Home = () => {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState<string>("");
 
+  useEffect(() => {
+    axios.get(`${process.env.SERVER_LOCAL_URl}`);
+    // .then((res) => {
+    //     if (res.status === 200) {
+    //         setAdminAuthenticated(true);
+    //     }
+    //     setLoading(false);
+    // });
+
+    // return () => {
+    //     setAdminAuthenticated(false);
+    // };
+  }, []);
+
   const handleEdit = () => {
     // setEditing(true);
   };
@@ -62,10 +76,8 @@ const Home = () => {
     // setEditing(false);
     // onUpdate({ id: todo.id, text });
   };
-
-  return <div>{"dddddd"}</div>;
-
-  // editing ? (
+  return <div>sdsds</div>;
+  // return editing ? (
   //   <Box sx={sxRoot}>
   //     <TextField
   //       label="Todo"
@@ -110,8 +122,8 @@ const Home = () => {
 };
 
 // export const getStaticProps: GetStaticProps = async () => {
-//   // const { data } = await axios.get(`${process.env.SERVER_LOCAL_URl}/deal`);
-//   const { data } = await axios.get(`${process.env.SERVER_LOCAL_URl}`);
+//   const { data } = await axios.get(`${process.env.SERVER_LOCAL_URl}/deal`);
+//   // const { data } = await axios.get(`${process.env.SERVER_LOCAL_URl}`);
 //   return {
 //     props: {
 //       todos: data,
